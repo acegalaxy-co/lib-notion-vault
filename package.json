@@ -1,6 +1,6 @@
 {
   "name": "@acegalaxy/notion-vault",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Load secrets from Notion vault databases into process.env. Supports multi-DB query, project/env filtering, alias expansion, in-memory TTL cache, and bootstrap row pattern.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
