@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-If you discover a security vulnerability in `@acegalaxy/notion-vault`, please
+If you discover a security vulnerability in `@acegalaxy/lib-notion-vault`, please
 **do not** open a public GitHub issue.
 
 Email **security@acegalaxy.co** with:

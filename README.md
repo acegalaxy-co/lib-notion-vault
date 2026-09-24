@@ -1,8 +1,6 @@
-# @acegalaxy/notion-vault
+# @acegalaxy/lib-notion-vault
 
-[![npm version](https://img.shields.io/npm/v/@acegalaxy/notion-vault.svg)](https://www.npmjs.com/package/@acegalaxy/notion-vault)
-[![license](https://img.shields.io/npm/l/@acegalaxy/notion-vault.svg)](LICENSE)
-[![node](https://img.shields.io/node/v/@acegalaxy/notion-vault.svg)](https://nodejs.org)
+Private git-dep. MIT licensed — see [LICENSE](LICENSE).
 
 **Library only.** Load secrets from Notion vault databases into `process.env`.
 
@@ -13,7 +11,7 @@ Zero runtime dependencies — uses native `fetch` (Node 18+).
 ## Install
 
 ```bash
-npm install @acegalaxy/notion-vault
+npm install "@acegalaxy/lib-notion-vault@github:acegalaxy-co/lib-notion-vault#v0.2.0"
 ```
 
 ## Setup
@@ -35,8 +33,8 @@ NOTION_VAULT_SHARED_CONFIG_DB_ID=...
 ## Library usage
 
 ```js
-const { VaultLoader, buildDatabasesFromEnv } = require('@acegalaxy/notion-vault');
-const { parseEnvFile } = require('@acegalaxy/notion-vault/env-file');
+const { VaultLoader, buildDatabasesFromEnv } = require('@acegalaxy/lib-notion-vault');
+const { parseEnvFile } = require('@acegalaxy/lib-notion-vault/env-file');
 
 const envFile = parseEnvFile('/path/to/.env-vault');
 const loader = new VaultLoader({

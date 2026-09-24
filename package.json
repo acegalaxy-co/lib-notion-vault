@@ -1,6 +1,6 @@
 {
-  "name": "@acegalaxy/notion-vault",
-  "version": "0.1.1",
+  "name": "@acegalaxy/lib-notion-vault",
+  "version": "0.2.0",
   "description": "Load secrets from Notion vault databases into process.env. Supports multi-DB query, project/env filtering, alias expansion, in-memory TTL cache, and bootstrap row pattern.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,21 +33,15 @@
   ],
   "author": "ACE Galaxy <hello@acegalaxy.co>",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "engines": {
     "node": ">=20"
   },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/acegalaxy-co/ace_commons-notion-vault-nodejs.git"
-  },
+  "repository": "github:acegalaxy-co/lib-notion-vault",
   "bugs": {
-    "url": "https://github.com/acegalaxy-co/ace_commons-notion-vault-nodejs/issues"
+    "url": "https://github.com/acegalaxy-co/lib-notion-vault/issues"
   },
-  "homepage": "https://github.com/acegalaxy-co/ace_commons-notion-vault-nodejs#readme",
+  "homepage": "https://github.com/acegalaxy-co/lib-notion-vault#readme",
   "files": [
     "dist",
     "README.md",

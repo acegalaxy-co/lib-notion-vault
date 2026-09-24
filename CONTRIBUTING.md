@@ -1,10 +1,10 @@
 # Contributing
 
-Thanks for your interest in `@acegalaxy/notion-vault`! Issues and PRs are welcome.
+Thanks for your interest in `@acegalaxy/lib-notion-vault`! Issues and PRs are welcome.
 
 ## Reporting issues
 
-- Search [existing issues](https://github.com/acegalaxy-co/ace_commons-notion-vault-nodejs/issues) first.
+- Search existing issues on the `acegalaxy-co/lib-notion-vault` repo first.
 - For bugs, use the **Bug report** template (steps to reproduce, expected vs actual, env).
 - For features, use the **Feature request** template.
 - For **security vulnerabilities**, do **not** open a public issue — see [SECURITY.md](./SECURITY.md).
