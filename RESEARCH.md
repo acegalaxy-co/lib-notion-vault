@@ -16,12 +16,12 @@ live state — re-verify trước khi dùng làm căn cứ quyết định mới
   `HEAD`). Working tree hiện có thay đổi chưa commit: rename package
   `@acegalaxy/notion-vault` → `@acegalaxy/lib-notion-vault`, `private: true`,
   `test/` mới (3 file), `dist/` build lại.
-- Nexus (`ace_ace_nexus-one_nodejs`): `tools/vault-sync/` (CLI wrapper
+- Nexus: `tools/vault-sync/` (CLI wrapper
   `sync-vault.mjs`/`load-vault.mjs` — bọc lib này cho cron/boot script),
   `scripts/sync-vault.sh`, `scripts/vault`, `_vault_/tokens/notion.env`
   (legacy token path), `.claude/rules/common/vault-no-mcp.md` (P0 rule cấm
   MCP cho vault CRUD), memory `project_notion_env_config_mirror.md` (DB
-  `Nexus_EnvConfigs` — mirror khác, KHÔNG cùng cơ chế bootstrap của lib này,
+  DB env-config mirror riêng của Nexus — mirror khác, KHÔNG cùng cơ chế bootstrap của lib này,
   nhưng cùng nguyên tắc "curl direct, không MCP").
 - `tools/vault-sync/README.md` — lý do tách CLI khỏi library (embeddable
   process vs standalone executable cho cron), per-project independence.
@@ -96,7 +96,7 @@ live state — re-verify trước khi dùng làm căn cứ quyết định mới
   phải cô lập khỏi mọi infra ngoài "Notion API direct + máy local" — đây
   là lý do `NotionClient` trong lib này tự implement `fetch` trực tiếp tới
   `api.notion.com` bằng reader token thay vì gọi qua bất kỳ MCP layer nào.
-  Nguyên tắc này áp cả cho DB `Nexus_EnvConfigs` (mirror khác, dùng script
+  Nguyên tắc này áp cả cho DB env-config mirror riêng của Nexus (mirror khác, dùng script
   Node/curl trực tiếp, không MCP) dù DB đó private.
 - Zero runtime dependency (chỉ dùng `fetch` native Node 18+) là quyết định
   có chủ đích — giảm supply-chain surface cho code động vào secret path.
