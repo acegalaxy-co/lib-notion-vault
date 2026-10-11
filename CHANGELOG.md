@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1]
+
+### Changed
+- Docs only: env/row names in README/RESEARCH follow `<SUPPLIER>_<LOAI>_<MUC_DICH>` (`BOOTSTRAP_TOKEN` -> `NOTION_TOKEN_VAULT_BOOTSTRAP`, `BOOTSTRAP_DB_ID` -> `NOTION_DB_VAULT_BOOTSTRAP_ID`, `NOTION_VAULT_BOOTSTRAP_TOKEN` -> `NOTION_TOKEN_VAULT_BOOTSTRAP`, `FW_OPENAI_API_KEY` -> `OPENAI_API_KEY_FW`, `NEXUS_OPENAI_API_KEY` -> `OPENAI_API_KEY_NEXUS`). No code or behavior change; lib reads no renamed env var.
+
 ## [0.2.0] - 2026-09-24
 
 ### Changed

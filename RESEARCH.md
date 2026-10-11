@@ -117,7 +117,7 @@ live state — re-verify trước khi dùng làm căn cứ quyết định mới
 - Bootstrap pattern (`fromBootstrap`) đã ship từ `v0.1.0`, đang là default
   path trong `tools/vault-sync/bin/load-vault.mjs` phía Nexus (Phase 12),
   legacy DB-IDs-in-env chỉ còn auto-detect fallback khi thiếu
-  `NOTION_VAULT_BOOTSTRAP_TOKEN`.
+  `NOTION_TOKEN_VAULT_BOOTSTRAP`.
 
 **Deferred / chưa implement (gaps thật thấy trong code):**
 - Không có CI (`.github/` chỉ có template issue/PR, không thấy workflow
