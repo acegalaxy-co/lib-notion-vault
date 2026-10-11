@@ -57,8 +57,8 @@ Instead of hardcoding DB IDs in env files, you can store project metadata in a s
 
 ```js
 const loader = await VaultLoader.fromBootstrap({
-  bootstrapToken: process.env.BOOTSTRAP_TOKEN,
-  bootstrapDbId: process.env.BOOTSTRAP_DB_ID,
+  bootstrapToken: process.env.NOTION_TOKEN_KANE,
+  bootstrapDbId: process.env.NOTION_DB_VAULT_BOOTSTRAP_ID,
   project: 'myproject',
   env: 'LOCAL',
 });
@@ -82,7 +82,7 @@ When you call `load({ projects, env })`:
 
 ## Alias expansion
 
-A `alias_keys` field on a row lists historical names (e.g. `FW_OPENAI_API_KEY, NEXUS_OPENAI_API_KEY`) so existing code reading old keys keeps working.
+A `alias_keys` field on a row lists historical names (e.g. `OPENAI_API_KEY_FW, OPENAI_API_KEY_NEXUS`) so existing code reading old keys keeps working.
 
 Disable with `injectAliases: false` if you only want canonical names.
 
