@@ -2,7 +2,7 @@
 name: deploy-security
 description: P0 khi deploy/publish — web root/image/package CHỈ chứa file public (allowlist), web server chặn dotfile + file nhạy cảm, probe live sau deploy; 200 có nội dung thật = FAIL + rollback
 status: live
-updated: 2026-10-08
+updated: 2026-10-13
 paths:
   - ".gitlab-ci.yml"
   - ".github/workflows/**"
@@ -51,6 +51,7 @@ location ~* /(package(-lock)?\.json|composer\.(json|lock)|Dockerfile|docker-comp
 Site cần serve `.json`/`.zip`/`.map` thật → whitelist path cụ thể trước block trên, không bỏ block. Caddy/Express tương đương: `respond 404` / middleware chặn `^/\.` + extension.
 
 Service nội bộ (DB, redis, admin, metrics): bind `127.0.0.1` hoặc network nội bộ, KHÔNG `0.0.0.0` / `ports: "5432:5432"` ra public.
+- KHÔNG publish hostname (DNS record + restart service) cho service nội bộ TRƯỚC khi access policy giới hạn nó đã active và verify được: request chưa xác thực phải trả `401` hoặc redirect về trang login.
 
 ## 3. Probe live SAU deploy (bắt buộc)
 
@@ -76,7 +77,22 @@ done; rm -f /tmp/probe.$$
 - Container KHÔNG mount nguyên `~/.ssh`, `~/.claude`, `~/.config/gh`, `~/.aws` — chỉ mount đúng file cần, `:ro`.
 - GitHub Actions: khai báo `permissions:` top-level (mặc định `contents: read`), job nào cần ghi mới mở rộng; token deps chỉ quyền read.
 - Secret vào runtime qua env/secret store của CI/host — KHÔNG `ENV`/`ARG` literal trong Dockerfile, KHÔNG literal trong compose, KHÔNG `echo $SECRET` trong CI log.
+- **Site public — scan nội dung** (khác scan leak file): text/ảnh/meta mới hoặc đổi phải qua kiểm tra pháp lý VN (quảng cáo, cờ bạc, tuyển dụng, dữ liệu cá nhân), lộ danh tính/địa chỉ/thông tin nội bộ, nội dung nhạy cảm. Có vấn đề → dừng deploy, báo user. Project có file rule content riêng (vd `careers-content.md`) → áp file đó.
 
-## 5. Khi review/thêm deploy mới
+## 5. KHÔNG wipe data prod khi deploy
 
-Checklist 1 dòng mỗi mục trong báo cáo deploy: allowlist ✓ · web-server block ✓ · port nội bộ không public ✓ · probe sạch ✓. Thiếu mục nào → nêu rõ, không claim "deploy an toàn".
+- Deploy prod = pull + rebuild + `up` **in place**. DB / volume / data dir giữ nguyên mọi lần.
+- **HARD BLOCK** trên host prod (không print, không run, kể cả khi user nói "clean redeploy"): `docker compose down -v`, `docker volume rm <data-vol>`, `docker system/volume prune --volumes`, `rm -rf <app-dir>`. Disk đầy → chỉ `docker image prune -af` (image-only).
+- KHÔNG có "fresh-DB mode". User muốn wipe → từ chối trong flow deploy, yêu cầu làm tay ngoài flow + xác nhận lại (không hoàn tác được).
+- Nhiều instance/host → mỗi lệnh deploy chỉ đụng đúng 1 instance, không restart/wipe chéo.
+- Lệnh SSH/deploy bị deny hoặc host unreachable → in lệnh cho user chạy tay, KHÔNG force.
+
+## 6. Docker & CI/CD — hỏi trước khi sửa
+
+- File hạ tầng: `Dockerfile*`, `docker-compose*`/`compose*`, `.dockerignore`, config workflow CI, script bootstrap/deploy → mặc định **KHÔNG đụng**.
+- Cần thay đổi → hỏi user trước, nêu rõ: **Scope** (file nào), **Thay đổi** (sửa/thêm/xoá gì), **Ảnh hưởng** (build/deploy/runtime, rollback ra sao).
+- Thêm file / đổi cấu trúc project → kiểm tra ảnh hưởng tới Docker build context + healthcheck.
+
+## 7. Khi review/thêm deploy mới
+
+Checklist 1 dòng mỗi mục trong báo cáo deploy: allowlist ✓ · web-server block ✓ · port nội bộ không public ✓ · probe sạch ✓ · nội dung public đã scan ✓ (nếu có site public). Thiếu mục nào → nêu rõ, không claim "deploy an toàn".

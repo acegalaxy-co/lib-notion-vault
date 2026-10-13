@@ -25,6 +25,8 @@ metadata:
 2. **Phát hiện secret đã lỡ in ra** (do lệnh trước đó, hoặc user tự paste vào chat): dừng lại, cảnh báo rõ với user là secret đã lộ trong conversation/log, khuyến nghị rotate — không lặp lại secret đó thêm lần nào nữa trong response tiếp theo.
 3. **Cần xác nhận secret tồn tại/đúng định dạng** mà không cần xem giá trị: dùng cách kiểm tra gián tiếp — độ dài (`wc -c`), prefix/pattern (`grep -oE '^sk-[a-z0-9]{6}'`), exit code của lệnh test kết nối — không `cat` toàn bộ giá trị.
 4. **Khi user hỏi "key này có dùng ở đâu không?"**: search theo pattern/hash, chỉ báo TÌM THẤY hay KHÔNG + vị trí file (path, tên biến), không in lại giá trị đầy đủ trong câu trả lời.
+5. **Lệnh cần token từ file env**: dùng trong subshell — source file, gọi lệnh, chỉ in field success/error, `unset` — để giá trị không nằm trong command line được echo lại hay trong output.
+6. **Trước MỖI lần gửi dữ liệu xác thực** (QR đăng nhập, OTP, magic link) vào chat/channel: kiểm lại đích vẫn private; fail closed — membership đổi thì dừng gửi, xoá tin vừa gửi, báo user.
 
 ## Áp dụng cho
 
@@ -32,6 +34,15 @@ metadata:
 - Output của `env`, `printenv`, `git log -p`, `git show` chạm file/commit có secret.
 - Debug log, stack trace có thể chứa Authorization header hoặc query string mang token.
 - Kết quả API test (`curl -v`) — luôn `-H "Authorization: Bearer <redacted>"` khi echo lại lệnh, không in token thật trong output hiển thị cho user.
+
+## Task chạm data nhạy cảm — khảo sát + hỏi trước khi làm (P0)
+
+Data nhạy cảm: bảng lương/thu nhập, thông tin cá nhân nhân sự/khách hàng (CCCD, SĐT, địa chỉ, tài khoản ngân hàng), token, password, API key, private key, vault, file `.env*`/`secrets/`/`security_envs/`.
+
+1. **Khảo sát read-only trước** — xác định file/bảng/field nào bị chạm, chỉ xem tên field/schema/độ dài, KHÔNG in value.
+2. **Dừng, hỏi user xác nhận** trước MỌI action đọc value / sửa / ghi / copy / migrate / gửi ra ngoài data đó. Câu hỏi nêu rõ: data gì, làm gì, nơi đích, ai/hệ thống nào thấy được.
+3. **Bypass** chỉ khi prompt hiện tại của user nói rõ cấp toàn quyền, vd: "Bạn được toàn quyền xử lý", "được phép làm tất cả", "quyền cho bạn". Bypass áp cho task trong prompt đó, KHÔNG kéo sang task sau. Không suy diễn bypass từ "làm nhanh đi", "tự xử lý", hay approval cũ.
+4. Bypass KHÔNG gỡ các cấm ở trên: vẫn không in secret ra chat/log, vẫn [[vault-no-mcp]].
 
 ## Khi phát hiện secret ĐÃ lộ (trong chat, log, hoặc vừa commit)
 
@@ -43,5 +54,6 @@ metadata:
 - ❌ "Chỉ đang debug thôi, redact sau" — redact NGAY tại lệnh in ra, không có bước "sau".
 - ❌ Dùng `sed`/`awk` redact nhưng để lỗi cú pháp khiến lệnh in nguyên văn — verify redact pattern trước khi chạy trên file thật chứa secret (test trên chuỗi giả lập trước nếu không chắc regex).
 - ❌ Nhắc lại secret user paste vào chat "để xác nhận" — xác nhận bằng cách mô tả (độ dài, prefix, vị trí tìm thấy), không lặp lại giá trị.
+- ❌ Đọc trang web/API response hiển thị secret (service token, client secret) rồi in text ra, kể cả qua regex redact — secret không luôn khớp hex/pattern quen; parse trong script, ghi thẳng file `umask 077`, chỉ in `SAVED`/bool/độ dài.
 
 Liên quan: [[vault-no-mcp]] (vault CRUD riêng, không qua MCP), [[feature-redflags]] (red-flag rationalization nói chung).
