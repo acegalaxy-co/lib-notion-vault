@@ -1,6 +1,6 @@
 ---
 name: browser-uipreview
-description: Lái Playwright MCP profile prj_libnotionvault_sv_uipreview (xem trước UI local — /ui-preview). MCP chỉ nạp trong subagent này, main session không tốn token tool defs/snapshot.
+description: Lái Playwright MCP profile prj_libnotionvault_sv_uipreview (xem trước UI local — /browser-ui-preview). MCP chỉ nạp trong subagent này, main session không tốn token tool defs/snapshot.
 mcpServers:
   - pw_libnotionvault_uipreview:
       type: stdio
